@@ -58,7 +58,7 @@
                 correo: document.getElementById("correo")
             };
 
-            let iti; // Definir fuera de la validación
+            let iti;
 
             const validaciones = {
                 razon: valor => valor.trim().length >= 3,
@@ -68,7 +68,7 @@
                 },                
                 contacto: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valor),
                 correo: valor => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor),
-                telefono: value => iti ? iti.isValidNumber() : false  // Validación del teléfono dentro de la función
+                telefono: value => iti ? iti.isValidNumber() : false
             };
         
             function validarCampos() {
@@ -106,7 +106,6 @@
                 }
             });
 
-            // Inicialización de intlTelInput
             const inputTelefono = document.getElementById("telefono");
             iti = window.intlTelInput(inputTelefono, {
                 initialCountry: "mx",
@@ -123,7 +122,7 @@
                     inputTelefono.classList.add("is-invalid");
                     inputTelefono.classList.remove("is-valid");
                 }
-                validarCampos(); // Asegura que la validación se actualice
+                validarCampos();
             });
         });
     </script>
