@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de empresa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container mt-5 mb-3">
+        <h1>Registro de empresa</h1>
+    </div>
+    <div class="container">
+        <form action="" method="post">
+            <div class="mb-3">
+                <label for="razon" class="form-label">Razon social</label>
+                <input type="text" class="form-control" id="razon" placeholder="empresa ABC">
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="rfc" class="form-label">RFC</label>
+                    <input type="text" class="form-control" id="rfc" placeholder="ABC 680524 P-76">
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="telefono" class="form-label">Telefono</label>
+                    <input type="text" class="form-control" id="telefono" placeholder="+52 1 55 1234 5678">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="contacto" class="form-label">Contacto</label>
+                <input type="text" class="form-control" id="contacto" placeholder="john doe">
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="correo" placeholder="name@example.com">
+            </div>
+            <input type="submit" value="Registrar">
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("registroForm");
+            const registrarBtn = document.getElementById("registrarBtn");
+
+            const campos = {
+                razon: document.getElementById("razon"),
+                rfc: document.getElementById("rfc"),
+                telefono: document.getElementById("telefono"),
+                contacto: document.getElementById("contacto"),
+                correo: document.getElementById("correo")
+            };
+                /*
+                Razon social (Mínimo 3 caracteres)
+                RFC( 3 Siglas de la empresa - 6 Fecha de constitución - 3 Homoclave)
+                teléfono (10 dígitos)
+                */
+            const validaciones = {
+                razon: valor => valor.trim().length >= 3,
+                rfc: valor => /^[A-ZÑ&]{3}\d{6}[A-Z\d]{3}$/i.test(valor),
+                telefono: valor => /^[0-9]{10}$/.test(valor),
+                contacto: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valor),
+                correo: valor => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)
+            };
+
+            function validarCampos() {
+                let valido = true;
+                Object.keys(campos).forEach(campo => {
+                    if (!validaciones[campo](campos[campo].value)) {
+                        valido = false;
+                    }
+                });
+
+                registrarBtn.disabled = !valido;
+            }
+
+            Object.values(campos).forEach(input => {
+                input.addEventListener("input", validarCampos);
+            });
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();  // Evitar el envío del formulario
+                if (!registrarBtn.disabled) {
+                    alert("Se validaron todos los datos correctamente");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
