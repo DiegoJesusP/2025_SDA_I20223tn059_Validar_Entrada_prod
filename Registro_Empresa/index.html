@@ -13,37 +13,35 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 <body>
-    <div class="container mt-5 mb-3">
-        <h1>Registro de empresa</h1>
-    </div>
-    <div class="container">
-        <form id="registroForm" action="" method="post">
-            <div class="mb-3">
-                <label for="razon" class="form-label">Razon social</label>
-                <input type="text" class="form-control" id="razon" placeholder="Empresa ABC">
-            </div>
-            <div class="row">
-                <div class="mb-3 col-md-6">
-                    <label for="rfc" class="form-label">RFC</label>
-                    <input type="text" class="form-control" id="rfc" placeholder="ABC 680524 P-76">
+    <div class="container-lg mt-5">
+        <h1 class="text-center mb-4">Registro de empresa</h1>
+        <div class="mx-auto p-4 shadow rounded bg-light" style="max-width: 600px;">
+            <form id="registroForm" action="" method="post">
+                <div class="mb-3">
+                    <label for="razon" class="form-label">Razón social</label>
+                    <input type="text" class="form-control" id="razon" placeholder="Empresa ABC" title="Debe de ingresar la razon social"required>
                 </div>
-                <div class="mb-3 col-md-6">
-                    <label for="telefono" class="form-label">Telefono</label>
-                    <input type="tel" class="form-control" id="telefono" name="telefono">
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="rfc" class="form-label">RFC</label>
+                        <input type="text" class="form-control" id="rfc" placeholder="ABC 680524 P-76" title="Debe de ingresar un RFC Moral valido" required>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="telefono" name="telefono" title="Debe ser un numero de telefono valido" required>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="contacto" class="form-label">Contacto</label>
-                <input type="text" class="form-control" id="contacto" placeholder="Dr. Doofersmith">
-            </div>
-            <div class="mb-3">
-                <label for="correo" class="form-label">Correo</label>
-                <input type="email" class="form-control" id="correo" placeholder="name@example.com">
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary" id="registrarBtn" disabled>Registrar</button>
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label for="contacto" class="form-label">Contacto</label>
+                    <input type="text" class="form-control" id="contacto" placeholder="Dr. Doofersmith" title="Debe de agregar un nombre de contacto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo</label>
+                    <input type="email" class="form-control" id="correo" placeholder="name@example.com" title="Debe de agregar un correo valido" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100" id="registrarBtn" disabled>Registrar</button>
+            </form>
+        </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -66,9 +64,14 @@
                     const rfcLimpio = valor.replace(/[\s-]/g, "");
                     return /^[A-ZÑ&]{3,4}\d{6}[A-Z\d]{2,3}$/i.test(rfcLimpio);
                 },                
-                contacto: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valor),
-                correo: valor => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor),
-                telefono: value => iti ? iti.isValidNumber() : false
+                contacto: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+([ '\-][A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/.test(valor.trim()),
+                correo: valor => /^[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$/.test(valor),
+                telefono: value => {
+                    if (!/^[0-9\s-]+$/.test(value)) {
+                        return false;
+                    }
+                    return typeof iti !== "undefined" && iti.isValidNumber();
+                }
             };
         
             function validarCampos() {
