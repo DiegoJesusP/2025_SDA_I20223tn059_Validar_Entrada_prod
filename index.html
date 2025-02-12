@@ -59,15 +59,29 @@
             let iti;
 
             const validaciones = {
-                razon: valor => valor.trim().length >= 3,
+                razon: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ&_]+([ '\-]+[A-Za-zÁÉÍÓÚáéíóúÑñ&-]+)*$/.test(valor.trim()) && valor.trim().length >= 3,
                 rfc: valor => {
                     const rfcLimpio = valor.replace(/[\s-]/g, "");
-                    return /^[A-ZÑ&]{3,4}\d{6}[A-Z\d]{2,3}$/i.test(rfcLimpio);
-                },                
-                contacto: valor => /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+([ '\-][A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/.test(valor.trim()),
+                    const regexRFC = /^[A-ZÑ&]{3,4}(\d{2})(\d{2})(\d{2})[A-Z\d]{2,3}$/i;
+            
+                    if (!regexRFC.test(rfcLimpio)) return false;
+            
+                    const partes = rfcLimpio.match(regexRFC);
+                    const mes = parseInt(partes[2], 10);
+                    const dia = parseInt(partes[3], 10);
+                    
+                    if (mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+                        return false;
+                    }
+            
+                    return true;
+                },
+            
+                contacto: valor => /^(?!.*\..*\.)[A-Za-zÁÉÍÓÚáéíóúÑñ]+(\.? [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/.test(valor.trim()),
                 correo: valor => /^[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+$/.test(valor),
                 telefono: value => {
-                    if (!/^[0-9\s-]+$/.test(value)) {
+                    const numeroTel = value.replace(/[\s-]/g, "");
+                    if (!/^\d+$/.test(numeroTel) || /^0+$/.test(numeroTel)) {
                         return false;
                     }
                     return typeof iti !== "undefined" && iti.isValidNumber();
